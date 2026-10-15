@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#e3fafc">
+<title>친하 PLUS - 스트레칭 & 동물 잡기</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@font-face{font-family:Paperlogy;font-weight:600;src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2')}
+@font-face{font-family:Paperlogy;font-weight:800;src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2')}
+:root{--ink:#212529;--mint:#e3fafc;--blue:#339af0;--green:#69db7c;--yellow:#ffd43b}
+*{box-sizing:border-box}body{margin:0;height:100dvh;overflow:hidden;display:flex;flex-direction:column;background:var(--mint);color:var(--ink);font-family:Paperlogy,sans-serif;touch-action:manipulation}
+.cartoon-box{border:4px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);background:#fff}
+.cartoon-btn{border:4px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);font-weight:800;transition:transform .1s,box-shadow .1s;cursor:pointer}
+.cartoon-btn:active:not(:disabled){transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.cartoon-btn:disabled{opacity:.5;cursor:not-allowed}.camera-container{position:relative;flex:1;min-height:0;width:100%;max-width:1200px;margin:auto;overflow:hidden;background:#dee2e6;display:flex;align-items:center;justify-content:center}
+.media-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.mirror-mode{transform:scaleX(-1)}
+.progress-track{height:clamp(16px,2.5vh,28px);overflow:hidden;border:4px solid var(--ink);border-radius:999px;background:#f1f3f5;box-shadow:inset 3px 3px 0 #0002}.progress-fill{height:100%;width:0;background:#ff8787;border-right:4px solid var(--ink);transition:width .1s linear,background-color .2s}
+.score-board,.timer-board{position:absolute;top:10px;z-index:20}.score-board{left:10px}.timer-board{right:10px}
+@keyframes pop{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.04);opacity:1}100%{transform:scale(1);opacity:1}}.animate-pop{animation:pop .35s ease-out}
+@keyframes bounce-slow{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}.animate-bounce-slow{animation:bounce-slow 2s infinite ease-in-out}
+.confetti{position:fixed;top:-24px;width:16px;height:16px;border:3px solid var(--ink);border-radius:4px;z-index:100;animation:fall 2.4s ease-in forwards;pointer-events:none}@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+table{border-collapse:separate;border-spacing:0;width:100%}th,td{border-bottom:2px solid #dee2e6;padding:8px;text-align:center;font-size:clamp(.9rem,1.5vw,1.2rem)}th{font-weight:800;color:#495057}tr:last-child td{border-bottom:none}
+#screen-game{min-height:0}button,input{font:inherit}input:focus{outline:3px solid #339af0;outline-offset:2px}
+@media(max-width:640px){body{padding:6px!important}.cartoon-box{border-width:3px;border-radius:16px;box-shadow:4px 4px 0 var(--ink)}.cartoon-btn{border-width:3px;border-radius:13px;box-shadow:3px 3px 0 var(--ink)}.camera-container{border-radius:16px}.score-board,.timer-board{top:8px;padding:5px 8px;font-size:1.05rem}.score-board{left:8px}.timer-board{right:8px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body class="p-2">
+<header class="text-center py-1 shrink-0 z-20">
+  <h1 class="font-extrabold drop-shadow-sm" style="font-size:clamp(1.25rem,2.5vw,2rem)">친하 PLUS</h1>
+  <p id="header-desc" class="mt-1 font-semibold text-teal-800 bg-white/70 inline-block px-3 py-1 rounded-full border-2 border-teal-800" style="font-size:clamp(.78rem,1.2vw,1rem)">원하는 활동을 선택해주세요!</p>
+</header>
+<main class="flex-1 min-h-0 w-full max-w-7xl mx-auto flex flex-col items-center justify-center gap-2 relative z-10 my-1">
+  <section id="screen-menu" class="w-full h-full flex flex-col items-center justify-center px-2 animate-pop">
+    <div class="cartoon-box p-5 sm:p-10 text-center max-w-3xl w-full">
+      <h2 class="font-extrabold mb-5" style="font-size:clamp(1.5rem,3.5vw,2.5rem)">어떤 활동을 해볼까요?</h2>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-stretch">
+        <button onclick="startApp('stretch')" class="cartoon-btn bg-[#69db7c] hover:bg-[#51cf66] py-5 px-4 flex-1 flex flex-col items-center gap-3">
+          <span class="text-5xl sm:text-6xl">🤸‍♂️</span><span style="font-size:clamp(1.1rem,2.5vw,1.6rem)">몸풀기 스트레칭</span><span class="text-sm font-semibold text-gray-700">동작을 따라 하고 자세 유지하기</span>
+        </button>
+        <button onclick="startApp('motion')" class="cartoon-btn bg-[#ffd43b] hover:bg-[#fcc419] py-5 px-4 flex-1 flex flex-col items-center gap-3">
+          <span class="text-5xl sm:text-6xl">🐶🦊🐸</span><span style="font-size:clamp(1.1rem,2.5vw,1.6rem)">동물 잡기 게임</span><span class="text-sm font-semibold text-gray-700">60초 동안 손으로 동물 잡기 · 보너스 동물은 50점!</span>
+        </button>
+      </div>
+      <button onclick="showLeaderboard()" class="mt-6 font-bold text-gray-600 underline text-lg">🏆 동물 잡기 명예의 전당</button>
+      <p class="mt-3 text-xs text-gray-500">카메라 사용이 필요해요. 점수 기록은 현재 브라우저에 저장됩니다.</p>
+    </div>
+  </section>
+
+  <section id="cam-status" class="hidden absolute inset-0 flex-col items-center justify-center z-50 p-3">
+    <div class="cartoon-box p-6 max-w-lg w-full text-center animate-pop">
+      <div id="cam-spinner" class="text-5xl mb-3 animate-spin">⏳</div>
+      <h3 id="cam-status-title" class="font-extrabold mb-2 text-xl">카메라 켜는 중...</h3>
+      <p id="cam-status-desc" class="text-gray-600 font-semibold mb-4">권한 팝업이 뜨면 '허용'을 눌러주세요.</p>
+      <button id="cam-retry-btn" onclick="retryCamera()" class="hidden cartoon-btn bg-[#ffd43b] py-2 px-4 w-full text-lg">다시 시도</button>
+      <button onclick="goHome()" class="cartoon-btn bg-gray-200 py-2 px-4 w-full text-lg mt-3">홈으로</button>
+    </div>
+  </section>
+
+  <section id="screen-game" class="hidden w-full h-full flex-col items-center gap-2 justify-center pb-1">
+    <div class="camera-container cartoon-box">
+      <video id="webcam" class="media-layer mirror-mode" autoplay playsinline muted></video>
+      <canvas id="game-canvas" class="media-layer mirror-mode" style="z-index:10"></canvas>
+      <div id="ui-motion" class="hidden">
+        <div class="score-board cartoon-box bg-[#339af0] text-white px-3 py-1.5 text-xl sm:text-3xl font-extrabold">⭐ <span id="game-score">0</span>점 <span id="combo-label" class="text-sm sm:text-lg ml-1">COMBO 0</span></div>
+        <div class="timer-board cartoon-box bg-[#ff6b6b] text-white px-3 py-1.5 text-xl sm:text-3xl font-extrabold">⏰ <span id="game-timer">60</span>초</div>
+        <div class="absolute left-1/2 -translate-x-1/2 bottom-3 cartoon-box bg-white/90 px-3 py-1 text-center text-xs sm:text-base font-bold z-20">동물을 잡으면 +20점 · 🌈 보너스 동물은 +50점</div>
+      </div>
+      <div id="ui-stretch-guide" class="hidden absolute top-2 right-2 sm:top-4 sm:right-4 cartoon-box bg-[#ffe066] p-2 z-20 flex flex-col items-center animate-bounce-slow">
+        <div id="guide-emoji" class="text-3xl sm:text-4xl mb-1">👐</div><div id="guide-title" class="font-extrabold text-center whitespace-nowrap" style="font-size:clamp(.7rem,1vw,1rem)">양팔 옆으로 벌리기</div>
+      </div>
+      <div id="success-overlay" class="hidden absolute inset-0 bg-[#69db7c]/90 backdrop-blur-sm z-30 flex-col items-center justify-center">
+        <div class="text-7xl sm:text-8xl mb-3">🌟</div><h2 class="font-extrabold text-white drop-shadow-md" style="font-size:clamp(2.5rem,5vw,4rem);-webkit-text-stroke:2px #222">완벽해요!</h2>
+      </div>
+      <button onclick="goHome()" aria-label="홈으로" class="absolute bottom-3 right-3 z-40 cartoon-btn bg-white px-3 py-2 text-sm">나가기 ✕</button>
+    </div>
+    <div id="ui-stretch-bottom" class="hidden w-full max-w-[1200px] cartoon-box p-2 sm:p-3 bg-white flex-col gap-1.5 shrink-0">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-2"><span id="step-indicator" class="bg-[#339af0] text-white px-2 py-0.5 rounded-full border-2 border-[#212529] font-bold">동작 1 / 10</span><span id="instruction-text" class="font-extrabold text-center flex-1">양팔을 옆으로 넓게 벌려주세요!</span></div>
+      <div class="progress-track w-full"><div id="progress-fill" class="progress-fill"></div></div>
+      <div class="flex justify-end mt-1"><button onclick="skipToNextStretch()" class="cartoon-btn bg-[#ffc078] hover:bg-[#ffa94d] px-3 py-1">⏭️ 다음 동작</button></div>
+    </div>
+  </section>
+
+  <section id="screen-stretch-done" class="hidden w-full h-full flex-col items-center justify-center px-3">
+    <div class="cartoon-box p-6 sm:p-10 text-center max-w-2xl w-full animate-pop"><div class="text-6xl sm:text-8xl mb-4">🏆</div><h2 class="font-extrabold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem)">스트레칭 완료!</h2><p class="text-gray-700 mb-6 font-semibold text-lg">모든 동작을 마쳤어요. 정말 잘했어요!</p><button onclick="goHome()" class="cartoon-btn bg-[#339af0] text-white py-3 px-6 w-full text-xl">처음 화면으로 🏠</button></div>
+  </section>
+
+  <section id="screen-motion-result" class="hidden w-full h-full flex-col items-center justify-center px-3">
+    <div class="cartoon-box p-6 sm:p-10 text-center max-w-md w-full animate-pop"><div class="text-6xl sm:text-7xl mb-2">🎉</div><h2 class="font-extrabold mb-2 text-2xl">게임 종료!</h2><p class="text-[#f59f00] font-extrabold text-3xl mb-2">내 점수: <span id="final-score">0</span>점</p><p id="result-message" class="font-bold text-gray-600 mb-4">멋진 플레이!</p>
+      <div class="flex flex-col gap-2 mb-5"><label for="player-name" class="font-bold text-gray-700 text-left">이름을 남겨주세요!</label><input type="text" maxlength="20" id="player-name" placeholder="이름 입력 (예: 홍길동)" class="cartoon-box p-3 font-bold text-lg"></div>
+      <div class="flex gap-2"><button onclick="goHome()" class="cartoon-btn bg-gray-200 text-gray-800 py-3 px-2 flex-1 text-lg">홈으로</button><button onclick="saveScoreAndShowBoard()" class="cartoon-btn bg-[#339af0] text-white py-3 px-2 flex-1 text-lg">점수 저장</button></div>
+    </div>
+  </section>
+
+  <section id="screen-leaderboard" class="hidden w-full h-full flex-col items-center justify-center px-3">
+    <div class="cartoon-box p-5 sm:p-8 text-center max-w-xl w-full animate-pop flex flex-col max-h-full"><h2 class="font-extrabold mb-4 text-2xl shrink-0">🏆 명예의 전당</h2><div class="w-full bg-[#f8f9fa] border-2 border-[#212529] rounded-xl overflow-hidden mb-5 flex-1 min-h-[150px] overflow-y-auto"><table><thead class="sticky top-0 bg-[#e9ecef] z-10"><tr><th>순위</th><th>이름</th><th>점수</th><th>날짜</th></tr></thead><tbody id="leaderboard-body"></tbody></table></div><button onclick="clearLeaderboard()" class="cartoon-btn bg-[#ffa8a8] py-2 px-4 w-full mb-3">기록 전체 삭제</button><button onclick="goHome()" class="cartoon-btn bg-[#69db7c] py-3 px-6 w-full text-lg">메인으로 돌아가기 🏠</button></div>
+  </section>
+</main>
+<footer class="w-full text-center py-1 mt-auto shrink-0 z-20"><p class="font-bold text-[#495057] text-sm">친하 · 움직이며 즐기는 시간</p></footer>
+
+<script type="module">
+import { PoseLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3';
+
+const $ = id => document.getElementById(id);
+const SCREEN_IDS = ['screen-menu','cam-status','screen-game','screen-stretch-done','screen-motion-result','screen-leaderboard'];
+let poseLandmarker, animationId, lastTime = 0, currentAppMode = 'menu', isPlaying = false;
+let isCameraInitialized = false, cameraStream = null;
+let lastKnownPose = null, poseKeepTimer = 0;
+const videoEl = $('webcam'), canvasEl = $('game-canvas'), ctx = canvasEl.getContext('2d');
+
+// 게임 난이도/보상 설정: 60초, 일반 동물 20점, 보너스 동물 50점
+const GAME_DURATION = 60;
+const NORMAL_POINTS = 20;
+const BONUS_POINTS = 50;
+const animalEmojis = [
+  {emoji:'🐶',points:20},{emoji:'🐱',points:20},{emoji:'🐰',points:20},{emoji:'🦊',points:20},{emoji:'🐼',points:20},
+  {emoji:'🐯',points:20},{emoji:'🐸',points:20},{emoji:'🐷',points:20},{emoji:'🐵',points:20},{emoji:'🐹',points:20},
+  {emoji:'🐻',points:20},{emoji:'🐨',points:20},{emoji:'🐮',points:20},{emoji:'🐔',points:20},{emoji:'🐧',points:20},
+  {emoji:'🐤',points:20},{emoji:'🦆',points:20},{emoji:'🦉',points:20},{emoji:'🦅',points:20},{emoji:'🦋',points:20},
+  {emoji:'🐢',points:20},{emoji:'🐍',points:20},{emoji:'🦎',points:20},{emoji:'🐙',points:20},{emoji:'🦀',points:20},
+  {emoji:'🐬',points:20},{emoji:'🐳',points:20},{emoji:'🦈',points:20},{emoji:'🦭',points:20},{emoji:'🦓',points:20},
+  {emoji:'🦒',points:20},{emoji:'🦘',points:20},{emoji:'🐘',points:20},{emoji:'🦛',points:20},{emoji:'🦏',points:20},
+  {emoji:'🐪',points:20},{emoji:'🐿️',points:20},{emoji:'🦔',points:20},{emoji:'🦥',points:20},{emoji:'🦦',points:20},
+  {emoji:'🦚',points:20},{emoji:'🦜',points:20},{emoji:'🦢',points:20},{emoji:'🦩',points:20},{emoji:'🦤',points:20},
+  {emoji:'🦄',points:BONUS_POINTS,bonus:true},{emoji:'🐲',points:BONUS_POINTS,bonus:true},{emoji:'🐉',points:BONUS_POINTS,bonus:true},{emoji:'🦖',points:BONUS_POINTS,bonus:true},{emoji:'🦁',points:BONUS_POINTS,bonus:true}
+];
+
+window.startApp = startApp; window.goHome = goHome; window.skipToNextStretch = skipToNextStretch;
+window.saveScoreAndShowBoard = saveScoreAndShowBoard; window.showLeaderboard = showLeaderboard;
+window.retryCamera = retryCamera; window.clearLeaderboard = clearLeaderboard;
+
+function showScreen(id){
+  SCREEN_IDS.forEach(sid=>{ $(sid).classList.add('hidden'); $(sid).classList.remove('flex'); });
+  $(id).classList.remove('hidden'); $(id).classList.add('flex');
+}
+function hideGameUIs(){['ui-motion','ui-stretch-guide','ui-stretch-bottom','success-overlay'].forEach(id=>{$(id).classList.add('hidden');$(id).classList.remove('flex');});}
+function stopCamera(){
+  if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}
+  videoEl.srcObject=null;isCameraInitialized=false;
+  if(poseLandmarker){try{poseLandmarker.close();}catch{}poseLandmarker=undefined;}
+}
+function goHome(){
+  isPlaying=false; currentAppMode='menu';
+  if(animationId) cancelAnimationFrame(animationId);
+  animationId=null; hideGameUIs();
+  stopCamera();
+  lastKnownPose=null; poseKeepTimer=0;
+  showScreen('screen-menu'); $('header-desc').textContent='원하는 활동을 선택해주세요!';
+  $('cam-spinner').textContent='⏳'; $('cam-spinner').classList.add('animate-spin'); $('cam-retry-btn').classList.add('hidden');
+  window.speechSynthesis?.cancel();
+}
+async function startApp(mode){
+  currentAppMode=mode; isPlaying=false; showScreen('cam-status');
+  $('header-desc').textContent=mode==='stretch'?'동작을 따라 하고 초록색이 찰 때까지 유지해요!':'60초 동안 동물을 잡아보세요! 일반 동물 +20점 · 보너스 +50점';
+  $('cam-status-title').textContent='카메라 켜는 중...'; $('cam-status-desc').textContent='브라우저 권한 팝업에서 카메라 사용을 허용해주세요.';
+  $('cam-spinner').textContent='⏳'; $('cam-spinner').classList.add('animate-spin'); $('cam-retry-btn').classList.add('hidden');
+  try{
+    if(!navigator.mediaDevices?.getUserMedia) throw new Error('이 브라우저에서는 카메라를 사용할 수 없어요. HTTPS 또는 localhost 주소로 접속해 주세요.');
+    if(!isCameraInitialized){
+      cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1280},height:{ideal:960}},audio:false});
+      videoEl.srcObject=cameraStream;
+      await new Promise((resolve,reject)=>{videoEl.onloadedmetadata=resolve;videoEl.onerror=()=>reject(new Error('카메라 영상을 불러오지 못했어요.'));});
+      await videoEl.play();
+      $('cam-status-title').textContent='자세 인식 AI 불러오는 중...';
+      const vision=await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm');
+      poseLandmarker=await PoseLandmarker.createFromOptions(vision,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',delegate:'GPU'},runningMode:'VIDEO',numPoses:1});
+      isCameraInitialized=true;
+    }
+    hideGameUIs(); showScreen('screen-game');
+    if(mode==='stretch'){
+      $('ui-stretch-guide').classList.remove('hidden'); $('ui-stretch-guide').classList.add('flex');
+      $('ui-stretch-bottom').classList.remove('hidden'); $('ui-stretch-bottom').classList.add('flex');
+      startStretchGame();
+    }else{
+      $('ui-motion').classList.remove('hidden'); startMotionGame();
+    }
+  }catch(error){
+    console.error(error); isPlaying=false;
+    if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}
+    videoEl.srcObject=null; isCameraInitialized=false;
+    if(poseLandmarker){try{poseLandmarker.close();}catch{} poseLandmarker=undefined;}
+    $('cam-spinner').textContent='😥'; $('cam-spinner').classList.remove('animate-spin');
+    $('cam-status-title').textContent='카메라를 켤 수 없어요';
+    $('cam-status-desc').textContent=(error?.message||'카메라 권한을 확인하고 다시 시도해 주세요.')+' 카메라는 HTTPS 또는 localhost에서 사용할 수 있어요.';
+    $('cam-retry-btn').classList.remove('hidden');
+  }
+}
+function retryCamera(){startApp(currentAppMode);}
+function clampVal(min,max,width){return Math.max(min,Math.min(max,width/50));}
+function runLoop(){
+  if(!isPlaying) return;
+  const displayWidth=Math.max(1,videoEl.clientWidth), displayHeight=Math.max(1,videoEl.clientHeight);
+  if(canvasEl.width!==displayWidth||canvasEl.height!==displayHeight){canvasEl.width=displayWidth;canvasEl.height=displayHeight;}
+  const w=canvasEl.width,h=canvasEl.height,now=performance.now();
+  const dt=Math.min(.06,Math.max(0,(now-lastTime)/1000)); lastTime=now;
+  ctx.clearRect(0,0,w,h);
+  let pose=null;
+  if(videoEl.readyState>=2&&poseLandmarker&&w>0){
+    try{const results=poseLandmarker.detectForVideo(videoEl,now);if(results.landmarks?.length){pose=results.landmarks[0];lastKnownPose=pose;poseKeepTimer=1;}}catch(err){console.warn('자세 인식 중 잠시 문제가 발생했어요.',err);}
+  }
+  poseKeepTimer=Math.max(0,poseKeepTimer-dt); const activePose=pose||(poseKeepTimer>0?lastKnownPose:null);
+  if(activePose) drawCartoonSkeleton(activePose,w,h);
+  if(currentAppMode==='stretch') updateStretchLogic(activePose,dt);
+  if(currentAppMode==='motion') updateMotionLogic(activePose,dt,w,h);
+  animationId=requestAnimationFrame(runLoop);
+}
+function drawCartoonSkeleton(landmarks,w,h){
+  const lines=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24]];
+  for(const [i,j] of lines){const a=landmarks[i],b=landmarks[j];if(!a||!b)continue;
+    ctx.beginPath();ctx.moveTo(a.x*w,a.y*h);ctx.lineTo(b.x*w,b.y*h);ctx.strokeStyle='#212529';ctx.lineWidth=clampVal(8,12,w);ctx.lineCap='round';ctx.stroke();
+    ctx.beginPath();ctx.moveTo(a.x*w,a.y*h);ctx.lineTo(b.x*w,b.y*h);ctx.strokeStyle='#fff';ctx.lineWidth=clampVal(3,5,w);ctx.lineCap='round';ctx.stroke();}
+  for(const i of [0,11,12,15,16]){const p=landmarks[i];if(!p)continue;ctx.beginPath();ctx.arc(p.x*w,p.y*h,clampVal(5,8,w),0,Math.PI*2);ctx.fillStyle='#ff922b';ctx.fill();ctx.lineWidth=clampVal(2,3,w);ctx.strokeStyle='#212529';ctx.stroke();}
+}
+
+// 동물 잡기 게임
+let motionScore=0,motionTimeLeft=GAME_DURATION,fallingAnimals=[],particles=[],floatingTexts=[],timeAccumulator=0,combo=0;
+function pickAnimal(){
+  // 보너스 동물은 적은 확률로 등장해요.
+  const isBonus=Math.random()<.12;
+  const pool=animalEmojis.filter(a=>Boolean(a.bonus)===isBonus);
+  return pool[Math.floor(Math.random()*pool.length)]||animalEmojis[0];
+}
+function startMotionGame(){
+  motionScore=0;motionTimeLeft=GAME_DURATION;fallingAnimals=[];particles=[];floatingTexts=[];timeAccumulator=0;combo=0;lastKnownPose=null;poseKeepTimer=0;
+  $('game-score').textContent='0';$('game-timer').textContent=String(GAME_DURATION);$('combo-label').textContent='COMBO 0';
+  isPlaying=true;lastTime=performance.now();speak('동물 잡기 게임 시작! 카메라 앞에서 손을 크게 움직여 동물을 잡아주세요.');
+  if(animationId)cancelAnimationFrame(animationId);runLoop();
+}
+function createHitParticles(x,y,size,bonus=false){
+  const em=bonus?['🌟','✨','🎉','💥']:['💥','팡!','✨','🎉'];
+  for(let i=0;i<8;i++)particles.push({x:x+(Math.random()-.5)*size,y:y+(Math.random()-.5)*size,vx:(Math.random()-.5)*380,vy:(Math.random()-.5)*380-80,life:.9,emoji:em[Math.floor(Math.random()*em.length)],size:size*(Math.random()*.5+.7),bonus});
+}
+function updateMotionLogic(activePose,dt,w,h){
+  motionTimeLeft-=dt;
+  if(motionTimeLeft<=0){motionTimeLeft=0;endMotionGame();return;}
+  $('game-timer').textContent=String(Math.ceil(motionTimeLeft));$('game-score').textContent=String(motionScore);$('combo-label').textContent='COMBO '+combo;
+  timeAccumulator+=dt;
+  // 조금씩 빨라지지만 초반에는 동물을 잡을 여유가 있어요.
+  const spawnRate=Math.max(.38,.78-((GAME_DURATION-motionTimeLeft)*.004));
+  if(timeAccumulator>=spawnRate){timeAccumulator=0;const animal=pickAnimal();const size=Math.max(28,Math.min(64,w/17));fallingAnimals.push({x:Math.random()*(w-size*2)+size,y:-80,size,emoji:animal.emoji,points:animal.points,bonus:Boolean(animal.bonus),speed:Math.random()*90+135+((GAME_DURATION-motionTimeLeft)*1.8),dead:false});}
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.globalAlpha=1;
+  for(const obj of fallingAnimals){if(obj.dead)continue;obj.y+=obj.speed*dt;
+    ctx.save();ctx.translate(obj.x,obj.y);if(obj.bonus){ctx.beginPath();ctx.arc(0,0,obj.size*1.05,0,Math.PI*2);ctx.fillStyle='#ffe066';ctx.fill();ctx.lineWidth=3;ctx.strokeStyle='#212529';ctx.stroke();}ctx.scale(-1,1);ctx.font=`${obj.size*1.75}px sans-serif`;ctx.fillText(obj.emoji,0,0);ctx.restore();
+    if(activePose){const hitPoints=[13,14,15,16,17,18,19,20,21,22];for(const idx of hitPoints){const p=activePose[idx];if(!p)continue;const px=p.x*w,py=p.y*h;if(Math.hypot(px-obj.x,py-obj.y)<obj.size*1.45){obj.dead=true;motionScore+=obj.points;combo++;createFloatingText('+'+obj.points+(obj.bonus?' BONUS!':''),obj.x,obj.y,obj.bonus);createHitParticles(obj.x,obj.y,obj.size,obj.bonus);playHitSound(obj.bonus);break;}}}
+  }
+  fallingAnimals=fallingAnimals.filter(o=>!o.dead&&o.y<h+100);
+  for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=420*dt;p.life-=dt*1.45;if(p.life<=0)continue;ctx.globalAlpha=Math.max(0,p.life);ctx.save();ctx.translate(p.x,p.y);ctx.scale(-1,1);ctx.font=`${p.size*(p.emoji==='팡!'?1.3:1)}px sans-serif`;ctx.fillStyle=p.bonus?'#f08c00':'#ff6b6b';ctx.fillText(p.emoji,0,0);ctx.restore();}
+  ctx.globalAlpha=1;particles=particles.filter(p=>p.life>0);
+  for(const ft of floatingTexts){ft.life-=dt;ft.y-=dt*110;ctx.globalAlpha=Math.max(0,ft.life);ctx.save();ctx.translate(ft.x,ft.y);ctx.scale(-1,1);ctx.font=`800 ${clampVal(24,44,w)}px Paperlogy,sans-serif`;ctx.fillStyle=ft.bonus?'#f08c00':'#ff6b6b';ctx.strokeStyle='#fff';ctx.lineWidth=4;ctx.strokeText(ft.text,0,0);ctx.fillText(ft.text,0,0);ctx.restore();}
+  ctx.globalAlpha=1;floatingTexts=floatingTexts.filter(ft=>ft.life>0);
+}
+function createFloatingText(text,x,y,bonus){floatingTexts.push({text,x,y,life:1,bonus});}
+let sharedAudioContext;
+function playHitSound(bonus=false){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;sharedAudioContext??=new AC();if(sharedAudioContext.state==='suspended')sharedAudioContext.resume();const osc=sharedAudioContext.createOscillator(),gain=sharedAudioContext.createGain(),now=sharedAudioContext.currentTime;osc.type=bonus?'triangle':'square';osc.frequency.setValueAtTime(bonus?650:440,now);osc.frequency.exponentialRampToValueAtTime(bonus?1500:1000,now+.12);gain.gain.setValueAtTime(.12,now);gain.gain.exponentialRampToValueAtTime(.01,now+.16);osc.connect(gain);gain.connect(sharedAudioContext.destination);osc.start(now);osc.stop(now+.16);}catch{}}
+function endMotionGame(){isPlaying=false;if(animationId)cancelAnimationFrame(animationId);stopCamera();hideGameUIs();showScreen('screen-motion-result');$('final-score').textContent=String(motionScore);$('player-name').value='';$('result-message').textContent=motionScore>=500?'대단해요! 동물 잡기 고수예요!':motionScore>=250?'좋아요! 빠르게 잘 잡았어요!':'참 잘했어요! 다음 판에는 더 많은 동물을 잡아봐요!';speak(`게임 끝! 점수는 ${motionScore}점입니다.`);createConfetti();}
+function safeReadScores(){try{const value=JSON.parse(localStorage.getItem('motionGameScores')||'[]');return Array.isArray(value)?value:[];}catch{return[];}}
+function saveScoreAndShowBoard(){const name=($('player-name').value.trim()||'익명').slice(0,20);let scores=safeReadScores();scores.push({name,score:motionScore,date:new Date().toLocaleDateString('ko-KR')});scores.sort((a,b)=>b.score-a.score);scores=scores.slice(0,100);try{localStorage.setItem('motionGameScores',JSON.stringify(scores));}catch{alert('브라우저 저장 공간에 기록을 저장하지 못했어요.');}showLeaderboard();}
+function showLeaderboard(){isPlaying=false;if(animationId)cancelAnimationFrame(animationId);hideGameUIs();showScreen('screen-leaderboard');const tbody=$('leaderboard-body');tbody.innerHTML='';const scores=safeReadScores();if(!scores.length){tbody.innerHTML='<tr><td colspan="4" class="py-6 text-gray-500 font-bold">아직 기록이 없습니다!</td></tr>';return;}scores.forEach((s,i)=>{const tr=document.createElement('tr');tr.className='bg-white';const rank=document.createElement('td'),name=document.createElement('td'),score=document.createElement('td'),date=document.createElement('td');rank.className='font-bold text-[#339af0]';rank.textContent=i===0?'🥇':i===1?'🥈':i===2?'🥉':String(i+1);name.className='font-bold';name.textContent=String(s.name??'익명');score.className='font-extrabold text-[#f59f00]';score.textContent=String(Number(s.score)||0);date.className='text-sm text-gray-500';date.textContent=String(s.date??'');tr.append(rank,name,score,date);tbody.appendChild(tr);});}
+function clearLeaderboard(){if(!confirm('저장된 기록을 모두 삭제할까요?'))return;localStorage.removeItem('motionGameScores');showLeaderboard();}
+
+// 스트레칭
+const getDist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const EXERCISES=[
+{id:'wide_arms',emoji:'👐',name:'양팔 옆으로 벌리기',instruction:'양팔을 옆으로 넓게 벌려주세요!',checkPose:p=>!!(p[11]&&p[12]&&p[15]&&p[16]&&getDist(p[15],p[16])>Math.abs(p[11].x-p[12].x)*2)},
+{id:'arms_up',emoji:'🙌',name:'위로 만세하기',instruction:'두 팔을 머리 위로 번쩍 들어주세요!',checkPose:p=>!!(p[11]&&p[12]&&p[15]&&p[16]&&p[15].y<p[11].y&&p[16].y<p[12].y&&getDist(p[15],p[16])>.15)},
+{id:'circle_head',emoji:'🙆',name:'머리 위 큰 동그라미',instruction:'양손을 머리 위로 모아 동그라미를 만들어요!',checkPose:p=>!!(p[0]&&p[15]&&p[16]&&p[15].y<p[0].y&&p[16].y<p[0].y&&getDist(p[15],p[16])<.25)},
+{id:'clasp_forward',emoji:'🤲',name:'깍지 끼고 앞으로',instruction:'양손을 모아 앞으로 쭉 밀어주세요!',checkPose:p=>!!(p[0]&&p[11]&&p[15]&&p[16]&&getDist(p[15],p[16])<.25&&p[15].y>p[0].y&&p[15].y<(p[23]?.y??p[11].y+.4))},
+{id:'clasp_up',emoji:'🙏',name:'깍지 끼고 위로',instruction:'손을 모아 하늘 높이 쭉 밀어 올려요!',checkPose:p=>!!(p[0]&&p[15]&&p[16]&&getDist(p[15],p[16])<.25&&p[15].y<p[0].y)},
+{id:'right_left',emoji:'👉',name:'한쪽 팔 가로로 뻗기',instruction:'한쪽 팔을 반대쪽으로 길게 뻗어주세요.',checkPose:p=>!!(p[11]&&p[16]&&p[16].x>p[11].x)},
+{id:'left_right',emoji:'👈',name:'반대쪽 팔 가로로 뻗기',instruction:'반대쪽 팔도 길게 뻗어주세요.',checkPose:p=>!!(p[12]&&p[15]&&p[15].x<p[12].x)},
+{id:'hands_hips',emoji:'🦸',name:'허리에 손',instruction:'양손을 허리에 올리고 당당하게 서요!',checkPose:p=>!!(p[11]&&p[12]&&p[15]&&p[16]&&Math.abs(p[15].y-(p[23]?.y??p[11].y+.35))<.15&&Math.abs(p[16].y-(p[24]?.y??p[12].y+.35))<.15)},
+{id:'w_shape',emoji:'💪',name:'W자 만들기',instruction:'팔꿈치를 구부려 양팔로 W자를 만들어요.',checkPose:p=>!!(p[11]&&p[12]&&p[13]&&p[14]&&p[15]&&p[16]&&p[15].y<p[11].y+.1&&p[16].y<p[12].y+.1&&p[13].y>p[11].y&&p[14].y>p[12].y)},
+{id:'rest',emoji:'🧍‍♂️',name:'바르게 서기',instruction:'팔을 아래로 편안하게 내리고 휴식!',checkPose:p=>!!(p[11]&&p[12]&&p[15]&&p[16]&&p[15].y>p[11].y+.15&&p[16].y>p[12].y+.15)}
+];
+let stretchCurrentIdx=0,stretchHoldProgress=0;const HOLD_TARGET=2.5;
+function startStretchGame(){stretchCurrentIdx=0;loadStretchStage(0);isPlaying=true;lastTime=performance.now();lastKnownPose=null;poseKeepTimer=0;if(animationId)cancelAnimationFrame(animationId);runLoop();}
+function loadStretchStage(idx){const ex=EXERCISES[idx];$('guide-emoji').textContent=ex.emoji;$('guide-title').textContent=ex.name;$('instruction-text').textContent=ex.instruction;$('step-indicator').textContent=`동작 ${idx+1} / ${EXERCISES.length}`;stretchHoldProgress=0;updateStretchProgress(0);speak(ex.instruction);}
+function updateStretchLogic(activePose,dt){if(!isPlaying)return;if(activePose&&EXERCISES[stretchCurrentIdx].checkPose(activePose))stretchHoldProgress+=dt;else stretchHoldProgress=Math.max(0,stretchHoldProgress-dt*.8);const ratio=Math.min(1,stretchHoldProgress/HOLD_TARGET);updateStretchProgress(ratio);if(ratio>=1)handleStretchSuccess();}
+function updateStretchProgress(ratio){$('progress-fill').style.width=`${ratio*100}%`;$('progress-fill').style.backgroundColor=ratio<.3?'#ff8787':ratio<.8?'#ffd43b':'#69db7c';}
+function handleStretchSuccess(){if(!isPlaying)return;isPlaying=false;playStretchSuccessSound();speak('참 잘했어요!');$('success-overlay').classList.remove('hidden');$('success-overlay').classList.add('flex');createConfetti();setTimeout(()=>{if(currentAppMode!=='stretch')return;$('success-overlay').classList.add('hidden');$('success-overlay').classList.remove('flex');skipToNextStretch();},1600);}
+function skipToNextStretch(){if(animationId)cancelAnimationFrame(animationId);animationId=null;isPlaying=false;$('cam-status').classList.add('hidden');$('cam-status').classList.remove('flex');if(currentAppMode==='stretch'&&stretchCurrentIdx<EXERCISES.length-1){stretchCurrentIdx++;loadStretchStage(stretchCurrentIdx);isPlaying=true;lastTime=performance.now();if(animationId)cancelAnimationFrame(animationId);runLoop();}else if(currentAppMode==='stretch'){finishStretchGame();}}
+function finishStretchGame(){isPlaying=false;if(animationId)cancelAnimationFrame(animationId);stopCamera();hideGameUIs();showScreen('screen-stretch-done');speak('모든 동작을 마쳤어요. 훌륭합니다!');for(let i=0;i<4;i++)setTimeout(createConfetti,i*500);}
+function playStretchSuccessSound(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;sharedAudioContext??=new AC();if(sharedAudioContext.state==='suspended')sharedAudioContext.resume();const osc=sharedAudioContext.createOscillator(),gain=sharedAudioContext.createGain(),now=sharedAudioContext.currentTime;osc.type='triangle';osc.frequency.setValueAtTime(523.25,now);osc.frequency.exponentialRampToValueAtTime(1046.5,now+.2);gain.gain.setValueAtTime(.2,now);gain.gain.exponentialRampToValueAtTime(.01,now+.4);osc.connect(gain);gain.connect(sharedAudioContext.destination);osc.start(now);osc.stop(now+.4);}catch{}}
+function speak(text){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=1;u.pitch=1.15;window.speechSynthesis.speak(u);}
+function createConfetti(){const colors=['#ff8787','#ffd43b','#69db7c','#339af0','#b197fc'];for(let i=0;i<26;i++){const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];c.style.animationDuration=(Math.random()*1.2+1.6)+'s';c.style.animationDelay=Math.random()*.2+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3500);}}
+
+// 화면 크기 변경 시 카메라 캔버스 크기 갱신
+window.addEventListener('resize',()=>{if(canvasEl.clientWidth>0){canvasEl.width=canvasEl.clientWidth;canvasEl.height=canvasEl.clientHeight;}});
+</script>
+</body>
+</html>
