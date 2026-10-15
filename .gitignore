@@ -1,0 +1,21 @@
+# Secrets
+.env
+**/.env
+# Private member database and backups
+server/data/db.json
+server/data/admin-initial-password.txt
+server/data/backups/
+server/data/db.corrupt-*.json
+server/data/*.tmp-*
+server/data/*.previous-*
+# Server logs and runtime dependencies
+**/node_modules/
+**/*.log
+server/server.log
+# Private user uploads (the bundled bunny background stays tracked)
+server/uploads/videos/*
+!server/uploads/videos/.gitkeep
+server/uploads/thumbs/*
+!server/uploads/thumbs/.gitkeep
+server/uploads/bgs/*
+!server/uploads/bgs/chinha-bunny-bg.png

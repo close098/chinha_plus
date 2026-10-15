@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>친하 공식 사이트 1.3.0</title><style>body{font-family:system-ui,sans-serif;background:#eaf7ff;color:#21435c;margin:0;padding:24px;line-height:1.75}main{max-width:880px;margin:auto;background:white;padding:clamp(18px,4vw,32px);border-radius:22px;border:1px solid #cfe8fb;box-shadow:0 12px 40px #92c7e322}code,pre{background:#f1f8fd;padding:4px 8px;border-radius:8px}pre{padding:14px;overflow:auto}.warn{background:#fff8e5;border:1px solid #ead79d;border-radius:12px;padding:14px}.links a{margin-right:14px}</style></head>
+<body><main>
+<h1>친하 공식 사이트 · 1.3.0</h1>
+<p>HTML 사이트와 Node.js 서버를 분리한 버전입니다. 로그인·회원 역할·공지·채팅 데이터는 서버에 저장됩니다. 총괄 관리자 로그인은 일반 홈페이지와 분리되어 있습니다.</p>
+<p class="links"><a href="https://www.youtube.com/@%EC%B9%9C%ED%95%98%EC%9C%A0%ED%8A%9C%EB%B2%84" target="_blank" rel="noopener">친하 YouTube</a><a href="https://discord.com/invite/QYW34DmVeF" target="_blank" rel="noopener">친하 Discord</a></p>
+<h2>1. 내 PC에서 실행</h2><ol><li>이 ZIP을 새 폴더에 압축 해제합니다.</li><li><code>server</code> 폴더를 열고 탐색기 주소창에 <code>powershell</code>을 입력한 뒤 Enter를 누릅니다.</li><li><code>node server.js</code>를 실행합니다.</li></ol>
+<p>Node.js 18 이상이 필요합니다. Docker, PostgreSQL, <code>npm install</code>은 필요하지 않습니다. 터미널에 나오는 사이트 주소를 열어야 로그인과 DB가 작동합니다.</p>
+<h2>2. 총괄 관리자 전용 로그인</h2><p>사이트의 하단에 있는 <b>총괄 로그인</b> 링크를 누르거나 주소 끝에 <code>/owner-login</code>을 붙여 접속합니다. 예: <code>http://127.0.0.1:3100/owner-login</code>. 로그인에 성공해야 관리자 대시보드로 이동합니다. 홈페이지 상단에는 총괄 패널 버튼이 표시되지 않습니다.</p>
+<p>처음 로컬 실행하면 비밀번호가 터미널과 <code>server/data/admin-initial-password.txt</code>에 생성됩니다. 공개 호스팅에서는 Render 환경 변수 <code>CHINHA_ADMIN_PASSWORD</code>로 처음 비밀번호를 지정하세요. 로그인 후 관리자 보안 메뉴에서 비밀번호를 변경하는 것을 권장합니다.</p>
+<h2>3. 역할별 패널</h2><ul><li><b>시청자:</b> 일반 사이트 기능만 보입니다.</li><li><b>실친:</b> 본인 영상 등록·삭제 및 스태프 채팅</li><li><b>썸네일러:</b> 썸네일 제작 및 PNG 다운로드</li><li><b>채팅 매니저:</b> 커뮤니티·스태프 채팅 관리</li><li><b>교사:</b> 공지 작성, 본인 공지 삭제, 커뮤니티 채팅 관리</li><li><b>총괄:</b> 별도 로그인 후 전체 관리자 기능과 회원 역할 지정</li></ul>
+<p>일반 회원은 총괄 역할을 스스로 부여할 수 없습니다. 서버 API에서도 요청한 역할과 로그인 세션을 확인합니다.</p>
+<h2>4. 공개 인터넷 호스팅</h2><p><code>DEPLOY-PUBLIC-HOSTING-KO.md</code> 안내를 따라 GitHub 저장소와 Render를 직접 연결하면 인터넷 접속용 HTTPS 주소를 발급받을 수 있습니다. <code>render.yaml</code>은 Render 배포 설정이며, 이 ZIP만으로 웹사이트가 자동 공개되는 것은 아닙니다.</p>
+<div class="warn"><b>비용과 권한 안내:</b> 현재 설정은 파일 DB와 업로드를 유지하기 위해 Render 영속 디스크를 사용하도록 되어 있으며 유료 플랜/스토리지 비용이 발생할 수 있습니다. 계정과 결제 설정은 보호자와 함께 확인하세요. ChatGPT는 호스팅 계정에 대신 로그인하거나 배포 버튼을 누를 수 없습니다.</div>
+<h2>5. 개인정보·DB</h2><p>실제 회원 DB는 ZIP에 포함하지 않았습니다. 첫 실행 때 서버가 빈 DB를 생성합니다. 개인 데이터, 이메일, 비밀번호 해시가 포함될 수 있는 <code>server/data/db.json</code>, 백업, <code>.env</code>는 공개 GitHub 저장소에 올리지 마세요. 기존 데이터를 옮길 때는 별도 백업 후 비공개 마이그레이션을 해야 합니다.</p>
+<h2>6. TV·휴대폰</h2><p>로컬 서버 실행 시 터미널에 나오는 같은 Wi-Fi의 접속 주소를 TV나 휴대폰에서 열 수 있습니다. 다른 장소에서 접속하려면 공개 호스팅 배포가 필요합니다.</p>
+<h2>폴더 구조</h2><pre>chinha-official-site-v1.3/
+├─ website/
+│  ├─ index.html
+│  └─ owner-login.html
+├─ server/
+│  ├─ server.js
+│  ├─ data/   (실행 시 DB 생성)
+│  └─ uploads/
+├─ render.yaml
+└─ DEPLOY-PUBLIC-HOSTING-KO.md</pre>
+</main></body></html>

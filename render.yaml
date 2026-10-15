@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: chinha-official-site
+    runtime: node
+    plan: starter
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: chinha-site-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CHINHA_DATA_DIR
+        value: /var/data
+      - key: CHINHA_UPLOAD_DIR
+        value: /var/data/uploads
+      - key: CHINHA_ADMIN_PASSWORD
+        sync: false
